@@ -5,4 +5,4 @@ Aulas ministradas por Rodrigo Rahman, links abaixo para segui-lo.
 [Instagram](https://www.instagram.com/rodrigorahman.dev/)  
 ___
 
-* [Desafio Dart Básico]()  
+* [Desafio Dart Básico](https://github.com/punkklan/academia_flutter_estudos/blob/main/desafioBasico.dart)  
