@@ -16,11 +16,9 @@ void main() {
   print(valorInt);
 
   //   int.parse('Marcio');     Isso vai dar erro, Marcio não é um int
-  int? valorTryParse = int.tryParse('Marcio'); // try = tente
+  int valorTryParse = int.tryParse('Marcio') ??
+      0; // try = tente    se não conseguir ?? coloca o valor 0
   print(valorTryParse);
-  valorTryParse == null
-      ? print('Variável null') //  Não consegui o parse, portanto é nulo
-      : print(valorTryParse);
 
   double preco = 30.26456;
   print(preco.toStringAsFixed(2));
