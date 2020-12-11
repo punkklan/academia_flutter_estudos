@@ -21,9 +21,7 @@ void main(List<String> args) {
 
   for (int i = 0; i < pacientes.length; i++) {
     pacienteDados = pacientes[i].split('|');
-    idade = int.tryParse(pacienteDados[1]) == null
-        ? idade = 0
-        : int.parse(pacienteDados[1]);
+    idade = int.tryParse(pacienteDados[1]) ?? 0;
     if (idade <= 20) {
       continue;
     }
