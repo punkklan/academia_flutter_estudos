@@ -14,6 +14,7 @@ int soma(int num1, int num2) {
   return num1 + num2;
 }
 
+//    parametros entre {}  são opcionais,  o = esta atribuindo um valor default
 int somaNomeadaDefault({int num1 = 0, int num2 = 0}) {
   return num1 + num2;
 }
