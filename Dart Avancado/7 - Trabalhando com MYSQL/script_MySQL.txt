@@ -1,0 +1,38 @@
+create database curso_dart_flutter;
+
+drop table aluno;
+drop table turma;
+drop table turma_aluno;
+
+create table aluno(
+	cd_aluno int primary key auto_increment,
+    nome varchar(100) unique
+);
+
+create table turma(
+	id int primary key auto_increment,
+    nome varchar(100) unique
+);
+
+create table turma_aluno(
+id_aluno int not null,
+id_turma int not null,
+foreign key (id_turma) references turma(id),
+foreign key (id_aluno) references aluno(cd_aluno)
+);
+	
+insert turma(nome) values('dart');
+
+delete from aluno where cd_aluno = 1 ;
+SELECT * FROM turma order by id asc; 
+SELECT * FROM turma where nome = 'Dart' order by id asc; 
+  
+SELECT cd_aluno, nome FROM aluno order by nome asc;
+
+SELECT t.nome, a.cd_aluno, a.nome FROM turma t
+	inner join turma_aluno ta on ta.id_turma = t.id
+    inner join aluno a on ta.id_aluno = a.cd_aluno;
+
+SELECT * FROM turma_aluno;
+SELECT * FROM aluno;
+SELECT * FROM turma;
