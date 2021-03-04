@@ -19,15 +19,10 @@ Future<void> myqsl() async {
 ''');
 
   sink.write('''
+CREATE DATABASE IF NOT EXISTS desafio_ibge;
 
-# -------------- CREATE TABLES --------------
-#                 tbl_estado
-#                 tbl_distrito
-#                 estado_distrito  
+USE desafio_ibge;
 
-''');
-
-  sink.write('''
 CREATE TABLE IF NOT EXISTS tbl_estado (
   id_api INT NOT NULL UNIQUE PRIMARY KEY,
   nome VARCHAR(50) NOT NULL,
@@ -41,7 +36,7 @@ CREATE TABLE IF NOT EXISTS tbl_distrito (
   CONSTRAINT fk_id_estado FOREIGN KEY (fk_id_estado)
   REFERENCES tbl_estado(id_api)
   ON DELETE CASCADE
-  ON UPDATE CASCADE,
+  ON UPDATE CASCADE
 );
 
 ''');
@@ -58,7 +53,6 @@ CREATE TABLE IF NOT EXISTS tbl_distrito (
   dataEstado.forEach(
     (listEstado) {
       var estado = EstadoModel.fromMap(listEstado);
-      //   var dataDistrito = await IbgeRepository().getDistrito(estado.id);
       estado_id.add(estado.id);
       sink.write('''
 INSERT INTO tbl_estado (id_api, nome, sigla) VALUES (${estado.id}, "${estado.nome}", "${estado.sigla}");           
@@ -75,7 +69,8 @@ INSERT INTO tbl_estado (id_api, nome, sigla) VALUES (${estado.id}, "${estado.nom
 ''');
 
   sink.write('''
-INSERT INTO tbl_distrito (id_api, nome, fk_id_estado) VALUES 
+INSERT INTO tbl_distrito (id_api, nome, fk_id_estado)
+VALUES
 ''');
 
   for (var x = 0; x < estado_id.length; x++) {
@@ -87,11 +82,14 @@ INSERT INTO tbl_distrito (id_api, nome, fk_id_estado) VALUES
       x + 1 == estado_id.length && y + 1 == dataDistrito.length
           ? pontuacao = ';'
           : pontuacao = ',';
-      sink.write('''
-  (${distrito.id}, "${distrito.nome}", ${estado_id[x]})''');
-      sink.write('''$pontuacao
-  ''');
+      sink.write(
+          '''(${distrito.id}, "${distrito.nome}", ${estado_id[x]})$pontuacao
+''');
     }
   }
   await sink.close();
+
+  print('-------------------------------------------');
+  print('Arquivo Scrip_SQL.txt criado na pasta build');
+  print('-------------------------------------------');
 }
