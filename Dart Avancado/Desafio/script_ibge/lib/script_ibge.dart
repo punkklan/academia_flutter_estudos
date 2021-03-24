@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS tbl_estado (
 CREATE TABLE IF NOT EXISTS tbl_distrito (
   id_api INT NOT NULL UNIQUE PRIMARY KEY,
   nome VARCHAR(50) NOT NULL,
-  fk_id_estado INT NOT NULL UNIQUE,
+  fk_id_estado INT NOT NULL,
   CONSTRAINT fk_id_estado FOREIGN KEY (fk_id_estado)
   REFERENCES tbl_estado(id_api)
   ON DELETE CASCADE
