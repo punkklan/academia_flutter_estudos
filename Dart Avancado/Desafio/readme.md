@@ -8,4 +8,4 @@
 * Versão 2  -  script_ibge_sql
         
         Adquire os dados dos estados e cidades do Brasil, utilizando a API do IBGE.
-        As informações são salvas diretamente no seu banco de dados MySQL. 
+        Conecta no seu banco de dados MySQL para inserir os dados coletados.
