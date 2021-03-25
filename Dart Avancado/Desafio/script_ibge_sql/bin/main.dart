@@ -1,7 +1,5 @@
-import 'package:script_ibge_sql/connection.dart' as sql;
+import 'package:script_ibge_sql/ibgeToSql.dart' as ibge_to_sql;
 
 Future<void> main() async {
-  await sql.excluirTabelas();
-  await sql.criarTabela();
-  await sql.inserirEstado();
+  ibge_to_sql.run(excluirTabelas: false);
 }

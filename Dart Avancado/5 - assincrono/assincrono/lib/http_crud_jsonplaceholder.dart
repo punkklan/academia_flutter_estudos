@@ -8,6 +8,7 @@ Future<void> run() async {
   var url = 'https://jsonplaceholder.typicode.com/posts';
 
   // criando um POST fake
+  // ignore: omit_local_variable_types
   Map<String, dynamic> requestSavePost = {
     'title': 'foot',
     'body': 'bar',
