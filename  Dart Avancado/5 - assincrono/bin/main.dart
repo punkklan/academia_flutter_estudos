@@ -5,6 +5,7 @@ import 'package:assincrono/http_crud_jsonplaceholder.dart' as json_post;
 import 'package:assincrono/dio_restapi.dart' as dio_api;
 import 'package:assincrono/streams_teste.dart' as streams_teste;
 import 'package:assincrono/streams_teste2.dart' as streams_teste2;
+import 'package:assincrono/http_wpp.dart' as wpp;
 
 void main(List<String> arguments) {
   // assincrono_dart.run();
@@ -14,5 +15,5 @@ void main(List<String> arguments) {
   // dio_api.run();
   // dio_api.dioInteceptorsteste();
   // streams_teste.run();
-  // streams_teste2.run();
+  streams_teste2.run();
 }
