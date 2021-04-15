@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 var amarelo = 0xFFF7F33A;
 var verde = 0xFF0F5220;
@@ -22,90 +23,51 @@ class _HomeMouseState extends State<HomeMouse> {
 
   @override
   Widget build(BuildContext context) {
+    // Inicializando e configurando o ScreenUtil
+    ScreenUtil.init(
+        BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width,
+          maxHeight: MediaQuery.of(context).size.height,
+        ),
+        // informa aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
+        designSize: Size(600, 800),
+        orientation: Orientation.portrait);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(verde),
         title: Text('Mouse Region   x= ${x.toStringAsFixed(2)} | y= ${y.toStringAsFixed(2)}', style: TextStyle(color: Color(branco))),
         centerTitle: true,
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.add),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.add_alert),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: PopupMenuButton(
-              icon: Icon(Icons.settings_applications),
-              onSelected: (value) => print(value),
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    value: 'Menu 1',
-                    child: Text(
-                      'Menu 1',
-                      style: TextStyle(color: Color(verde)),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'Menu 2',
-                    child: Text(
-                      'Menu 2',
-                      style: TextStyle(color: Color(verde)),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'Icon ADD',
-                    child: Icon(
-                      Icons.add,
-                      color: Color(verde),
-                    ),
-                  ),
-                ];
-              },
-            ),
-          ),
-        ],
       ),
-      body: Center(
+      body: Container(
+        width: 640.w,
+        height: 800.w,
         child: MouseRegion(
           onHover: _updateLocation,
-          child: Column(
+          child: Stack(
             children: [
-              Stack(
-                children: [
-                  Image.asset('assets/botHunterTelegram.jpg'),
-                  Positioned(
-                    top: y - 25 - 56,
-                    left: x - 25,
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/botHunterTelegram.jpg'),
-                          scale: 2,
-                          fit: BoxFit.none,
-                        ),
-                        color: Color(verde),
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            blurRadius: 10,
-                            offset: Offset(5, 5),
-                          ),
-                        ],
-                      ),
+              Positioned(
+                top: y - 25.w - 56.h,
+                left: x - 25.w,
+                child: Container(
+                  width: 50.w,
+                  height: 50.h,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/botHunterTelegram.jpg'),
+                      scale: 2,
+                      fit: BoxFit.none,
                     ),
+                    color: Color(verde),
+                    borderRadius: BorderRadius.circular(30.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 10.r,
+                        offset: Offset(5, 5),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),

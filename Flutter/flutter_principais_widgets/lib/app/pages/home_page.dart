@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_principais_widgets/app/pages/scroll_list_view.page.dart';
+import 'package:flutter_principais_widgets/app/pages/textos_botoes_page.dart';
 
 var amarelo = 0xFFF7F33A;
 var verde = 0xFF0F5220;
@@ -60,7 +62,19 @@ class HomePage extends StatelessWidget {
                     break;
                   case 3:
                     {
-                      Navigator.of(context).pushNamed('/textos_Botoes');
+                      Navigator.of(context).pushNamed(TextosBotoesPage.routerName);
+                    }
+
+                    break;
+                  case 4:
+                    {
+                      Navigator.of(context).pushNamed(ScrollListViewPage.routerName);
+                    }
+
+                    break;
+                  case 5:
+                    {
+                      Navigator.of(context).pushNamed('/mouse');
                     }
 
                     break;
@@ -91,6 +105,13 @@ class HomePage extends StatelessWidget {
                   ),
                   PopupMenuItem(
                     value: 4,
+                    child: Text(
+                      'Scroll List',
+                      style: TextStyle(color: Color(verde)),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 5,
                     child: Icon(
                       Icons.mouse,
                       color: Color(verde),
