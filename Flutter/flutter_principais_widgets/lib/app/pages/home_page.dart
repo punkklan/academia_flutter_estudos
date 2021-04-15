@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                     break;
                   case 2:
                     {
-                      Navigator.of(context).pushNamed('/media2');
+                      Navigator.of(context).pushNamed('/listas');
                     }
                     break;
                   case 3:
@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
                   PopupMenuItem(
                     value: 2,
                     child: Text(
-                      'Página Media Query 2',
+                      'Listas',
                       style: TextStyle(color: Color(verde)),
                     ),
                   ),
