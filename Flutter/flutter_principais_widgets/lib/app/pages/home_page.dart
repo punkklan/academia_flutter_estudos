@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
                     break;
                   case 3:
                     {
-                      Navigator.of(context).pushNamed('/mouse');
+                      Navigator.of(context).pushNamed('/textos_Botoes');
                     }
 
                     break;
@@ -84,6 +84,13 @@ class HomePage extends StatelessWidget {
                   ),
                   PopupMenuItem(
                     value: 3,
+                    child: Text(
+                      'Textos Botões',
+                      style: TextStyle(color: Color(verde)),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 4,
                     child: Icon(
                       Icons.mouse,
                       color: Color(verde),

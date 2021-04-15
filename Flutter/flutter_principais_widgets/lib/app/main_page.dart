@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_principais_widgets/app/pages/home_mouse.dart';
 import 'package:flutter_principais_widgets/app/pages/home_page.dart';
 import 'package:flutter_principais_widgets/app/pages/listas_page.dart';
+import 'package:flutter_principais_widgets/app/pages/textos_botoes_page.dart';
 
 import 'pages/mediaquery_page.dart';
 import 'pages/mediaquery_page2.dart';
@@ -18,6 +19,7 @@ class MainPage extends StatelessWidget {
       routes: {
         ListasPage().routerName: (_) => ListasPage(),
         MediaQueryPage.routerName: (_) => MediaQueryPage(),
+        TextosBotoesPage.routerName: (_) => TextosBotoesPage(),
         '/media2': (_) => MediaQueryPage2(),
         '/mouse': (_) => HomeMouse(),
       },
