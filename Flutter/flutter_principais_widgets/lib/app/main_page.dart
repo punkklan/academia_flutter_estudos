@@ -16,8 +16,8 @@ class MainPage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: HomePage(),
       routes: {
-        MediaQueryPage.routerName: (_) => MediaQueryPage(),
         ListasPage().routerName: (_) => ListasPage(),
+        MediaQueryPage.routerName: (_) => MediaQueryPage(),
         '/media2': (_) => MediaQueryPage2(),
         '/mouse': (_) => HomeMouse(),
       },

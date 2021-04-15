@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_principais_widgets/app/pages/mediaquery_page.dart';
 
 var amarelo = 0xFFF7F33A;
 var verde = 0xFF0F5220;
@@ -44,12 +43,14 @@ class HomePage extends StatelessWidget {
 
                       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => MediaQueryPage()), (route) => route.isFirst);
 
-                      //  Navigator.of(context).pushNamed('/media1');
+                      Navigator.of(context).pushNamed('/media');
+
                       //  Navigator.of(context).pushReplacementNamed('/media1');
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        (MediaQueryPage.routerName),
-                        ModalRoute.withName('/'),
-                      );
+                      //
+                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                      //   (MediaQueryPage.routerName),
+                      //   ModalRoute.withName('/'),
+                      // );
                     }
                     break;
                   case 2:
@@ -70,7 +71,7 @@ class HomePage extends StatelessWidget {
                   PopupMenuItem(
                     value: 1,
                     child: Text(
-                      'Página Media Query 1',
+                      'Media Query',
                       style: TextStyle(color: Color(verde)),
                     ),
                   ),
