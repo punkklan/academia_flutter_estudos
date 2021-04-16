@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: must_be_immutable
 class ScrollListViewPage extends StatelessWidget {
   static String routerName = '/scroll_list_view';
   var indices = List.generate(100, (index) => index);

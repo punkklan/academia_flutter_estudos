@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_principais_widgets/app/pages/cidade_page.dart';
 import 'package:flutter_principais_widgets/app/pages/home_mouse.dart';
 import 'package:flutter_principais_widgets/app/pages/home_page.dart';
 import 'package:flutter_principais_widgets/app/pages/listas_page.dart';
@@ -22,6 +23,7 @@ class MainPage extends StatelessWidget {
         MediaQueryPage.routerName: (_) => MediaQueryPage(),
         TextosBotoesPage.routerName: (_) => TextosBotoesPage(),
         ScrollListViewPage.routerName: (_) => ScrollListViewPage(),
+        CidadesPage.routeName: (_) => CidadesPage(),
         '/mouse': (_) => HomeMouse(),
       },
     );

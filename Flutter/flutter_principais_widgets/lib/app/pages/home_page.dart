@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_principais_widgets/app/pages/cidade_page.dart';
 import 'package:flutter_principais_widgets/app/pages/scroll_list_view.page.dart';
 import 'package:flutter_principais_widgets/app/pages/textos_botoes_page.dart';
 
 var amarelo = 0xFFF7F33A;
 var verde = 0xFF0F5220;
 var branco = 0xFFFFFFFF;
+var vermelho = 0xFFFF0101;
 
 class HomePage extends StatelessWidget {
   static String routerName = '/';
@@ -64,19 +66,21 @@ class HomePage extends StatelessWidget {
                     {
                       Navigator.of(context).pushNamed(TextosBotoesPage.routerName);
                     }
-
                     break;
                   case 4:
                     {
                       Navigator.of(context).pushNamed(ScrollListViewPage.routerName);
                     }
-
                     break;
                   case 5:
                     {
                       Navigator.of(context).pushNamed('/mouse');
                     }
-
+                    break;
+                  case 6:
+                    {
+                      Navigator.of(context).pushNamed(CidadesPage.routeName);
+                    }
                     break;
                 }
               },
@@ -115,6 +119,21 @@ class HomePage extends StatelessWidget {
                     child: Icon(
                       Icons.mouse,
                       color: Color(verde),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 6,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.location_city,
+                          color: Color(vermelho),
+                        ),
+                        Text(
+                          ' Cidades',
+                          style: TextStyle(color: Color(vermelho)),
+                        ),
+                      ],
                     ),
                   ),
                 ];

@@ -65,7 +65,42 @@ class TextosBotoesPage extends StatelessWidget {
                 onHorizontalDragEnd: (_) => print('End $_'),
                 child: Text('GestureDetector', style: TextStyle(fontSize: 15.sp)),
               ),
-            )
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    offset: Offset(8, 8),
+                  )
+                ],
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.blue,
+                    Colors.green,
+                  ],
+                ),
+              ),
+              width: 250.w,
+              height: 60.h,
+              child: Center(
+                child: InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Botão Gradiente',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.r,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
