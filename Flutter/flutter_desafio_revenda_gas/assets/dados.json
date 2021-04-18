@@ -35,5 +35,27 @@
         "tempoMedio": "30-45",
         "preco": 82.90
         
+    },
+
+
+    {
+        "tipo": "xxxxx",
+        "nome": "Yyyyyy Filho",
+        "cor": "00632C",
+        "nota": 0.8,
+        "melhorPreco": false,
+        "tempoMedio": "30-75",
+        "preco": 80.50
+    },
+    {
+        "tipo": "TTTTTT",
+        "nome": "Zxxxxx",
+        "cor": "DA13AE",
+        "nota": 2.7,
+        "melhorPreco": false,
+        "tempoMedio": "50-75",
+        "preco": 205.90
+        
     }
+    
 ]

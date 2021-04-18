@@ -1,28 +1,42 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_desafio_revenda_gas/app/my_colors.dart';
+import 'package:flutter_desafio_revenda_gas/app/pages/teste_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-int cinza = 0xFFA0A0A0;
-int cinzaFundo = 0xFFDADADA;
-int azul = 0xFF0A9EF3;
-int laranja = 0xFFF3A10A;
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
 
   static String routerName = '/';
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<dynamic> revendedores;
+  @override
+  void initState() {
+    super.initState();
+    rootBundle.loadString('assets/dados.json').then((jsonData) {
+      revendedores = json.decode(jsonData);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     ScreenUtil.init(
         BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width,
           maxHeight: MediaQuery.of(context).size.height,
         ),
-        // informa aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
+        // informe aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
         designSize: Size(313, 663),
         orientation: Orientation.portrait);
-    var x = MediaQuery.of(context).size.width;
-    var y = MediaQuery.of(context).size.height;
+
     return Container(
       child: Scaffold(
         appBar: AppBar(
@@ -42,9 +56,12 @@ class HomePage extends StatelessWidget {
                   )),
             ),
             InkWell(
-              onTap: () {},
-              child: TextButton(
-                onPressed: () {},
+              onTap: () {
+                print('Navigator Teste Page');
+                Navigator.of(context).pushNamed(TestePage.routerName);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 23.h),
                 child: Text(
                   '?',
                   style: TextStyle(color: Colors.white, fontSize: 24.h),
@@ -53,248 +70,286 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: Container(
-          color: Color(cinzaFundo),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(15.h),
-                color: Colors.white,
-                height: 70.h,
-                width: ScreenUtil().screenWidth,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        body: !isPortrait
+            ? Center(child: Text('Desculpe, utilize no modo retrato.'))
+            : Container(
+                color: Color(MyColors.cinzaFundo),
+                child: Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Botijões de 13kg em:',
-                          style: TextStyle(
-                            fontSize: 9.h,
-                            color: Color(cinza),
-                          ),
-                        ),
-                        Text(
-                          'Av Paulista, 1001',
-                          style: TextStyle(
-                            fontSize: 14.h,
-                          ),
-                        ),
-                        Text(
-                          'Paulista, São Paulo, Sp',
-                          style: TextStyle(
-                            fontSize: 11.h,
-                            color: Color(cinza),
-                          ),
-                        ),
-                      ],
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Column(
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 13.w),
+                      color: Colors.white,
+                      width: ScreenUtil().screenWidth,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.location_on,
-                            color: Color(azul),
-                            size: 24.h,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Botijões de 13kg em:',
+                                style: TextStyle(
+                                  fontSize: 9.h,
+                                  color: Color(MyColors.cinza),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 3.h, bottom: 1.h),
+                                child: Text(
+                                  'Av Paulista, 1001',
+                                  style: TextStyle(
+                                    fontSize: 14.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Paulista, São Paulo, Sp',
+                                style: TextStyle(
+                                  fontSize: 11.h,
+                                  color: Color(MyColors.cinza),
+                                ),
+                              ),
+                            ],
                           ),
-                          Container(height: 2.h),
-                          Text(
-                            'Mudar',
-                            style: TextStyle(
-                              fontSize: 11.h,
-                              color: Color(azul),
+                          InkWell(
+                            onTap: () => print('Click Mudar'),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Color(MyColors.azul),
+                                  size: 24.h,
+                                ),
+                                Container(height: 2.h),
+                                Text(
+                                  'Mudar',
+                                  style: TextStyle(
+                                    fontSize: 11.h,
+                                    color: Color(MyColors.azul),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: revendedores?.length ?? 0,
+                        itemBuilder: (_, index) {
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 0),
+                            child: Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  // Marcas de Gas ---------------------
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      RotatedBox(
+                                        quarterTurns: -1,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                            ),
+                                            color: Color(int.parse('0xFF' + revendedores[index]['cor'])),
+                                          ),
+                                          height: 30.w,
+                                          width: 95.h,
+                                          child: Center(
+                                            child: Text(
+                                              revendedores[index]['tipo'],
+                                              style: TextStyle(fontSize: 11.h, color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  //
+                                  // Área Branca
+                                  Container(
+                                    //  -30 é a lagura do Banner Marca do gás
+                                    //  -20 é a soma padding inicial left + right
+                                    width: MediaQuery.of(context).size.width - 30.w - 20.w,
+                                    height: 95.h,
+                                    color: Colors.white,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        //
+                                        // Linha Superior
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 18.h, left: 8.w, bottom: 15.h),
+                                              child: Text(
+                                                revendedores[index]['nome'],
+                                                style: TextStyle(
+                                                  fontSize: 12.h,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            revendedores[index]['melhorPreco']
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Color(MyColors.laranja),
+                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.all(5.h),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.label,
+                                                            size: 15.h,
+                                                            color: Colors.white,
+                                                          ),
+                                                          SizedBox(width: 5.w),
+                                                          Text(
+                                                            'Melhor Preço',
+                                                            style: TextStyle(fontSize: 8.5.h, color: Colors.white),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container(),
+                                          ],
+                                        ),
+                                        //
+                                        //  linha inferior
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              //
+                                              //  Nota
+                                              Container(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text("Nota", style: TextStyle(fontSize: 11.h, color: Color(MyColors.cinza))),
+                                                    SizedBox(
+                                                      height: 3.h,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(revendedores[index]['nota'].toString(),
+                                                            style: TextStyle(
+                                                              fontSize: 18.h,
+                                                              fontWeight: FontWeight.bold,
+                                                            )),
+                                                        Stack(
+                                                          alignment: AlignmentDirectional.center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.star,
+                                                              size: 18.h,
+                                                              color: Color(MyColors.cinza),
+                                                            ),
+                                                            Icon(
+                                                              Icons.star,
+                                                              size: 12.h,
+                                                              color: Colors.yellow,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+
+                                              //  Tempo Médio
+                                              Container(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      "Tempo Médio",
+                                                      style: TextStyle(
+                                                        fontSize: 11.h,
+                                                        color: Color(MyColors.cinza),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 3.h),
+                                                    Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Text("30-45",
+                                                            style: TextStyle(
+                                                              fontSize: 18.h,
+                                                              fontWeight: FontWeight.bold,
+                                                            )),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(bottom: 1.2.h),
+                                                          child: Text(
+                                                            "min",
+                                                            style: TextStyle(
+                                                              fontSize: 10.h,
+                                                              color: Color(MyColors.cinza),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+
+                                              //  Preço
+                                              Container(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      "Preço",
+                                                      style: TextStyle(
+                                                        fontSize: 11.h,
+                                                        color: Color(MyColors.cinza),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 3.h,
+                                                    ),
+                                                    Text(('R\$ ' + revendedores[index]['preco'].toStringAsFixed(2)),
+                                                        style: TextStyle(
+                                                          fontSize: 18.h,
+                                                          fontWeight: FontWeight.bold,
+                                                        )),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (_, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 0),
-                      child: InkWell(
-                        onTap: () => print(index),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                          ),
-                          height: 90.h,
-                          child: Row(
-                            children: [
-                              // Marcas de Gas ---------------------
-                              RotatedBox(
-                                quarterTurns: -1,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      topRight: Radius.circular(8),
-                                    ),
-                                    color: Color(azul),
-                                  ),
-                                  height: 30.w,
-                                  width: 90.h,
-                                  child: Center(
-                                      child: Text(
-                                    'Multimarcas',
-                                    style: TextStyle(fontSize: 11.h, color: Colors.white),
-                                  )),
-                                ),
-                              ),
-                              //   Área branca do card ----------------------
-                              Padding(
-                                padding: EdgeInsets.only(top: 8.h, bottom: 8.h, left: 8.w),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    //      Linha Superior do card------------------
-                                    Row(
-                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                            // height: 40.h,
-                                            // width: 178.w,
-                                            //  color: Colors.red,
-                                            child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                'Revenda do Gás',
-                                                style: TextStyle(
-                                                  fontSize: 11.h,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )),
-                                        // Banner melhor preço ---------------------------
-                                        Container(
-                                          // height: 26.h,
-                                          // width: 83.w,
-                                          decoration: BoxDecoration(
-                                            color: Color(laranja),
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(5),
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(7.h),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Icon(
-                                                  Icons.label,
-                                                  size: 15.h,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(
-                                                  'Melhor Preço',
-                                                  style: TextStyle(fontSize: 8.5.h, color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-
-                                    //      Linha inferior do card ------------------
-                                    Row(
-                                      children: [
-                                        Container(
-                                          // height: 50.h,
-                                          // width: 50.w,
-                                          color: Colors.amber,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text("Nota", style: TextStyle(fontSize: 11.h, color: Color(cinza))),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Text("4.6", style: TextStyle(fontSize: 20.h)),
-                                                  Icon(
-                                                    Icons.star,
-                                                    size: 15.h,
-                                                    color: Colors.white,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        Container(
-                                          // height: 50.h,
-                                          // width: 90.w,
-                                          color: Colors.amber,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text("Tempo Médio", style: TextStyle(fontSize: 11.h, color: Color(cinza))),
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("30-45", style: TextStyle(fontSize: 20.h)),
-                                                  Text("min", style: TextStyle(fontSize: 10.h, color: Color(cinza))),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        Container(
-                                          // height: 50.h,
-                                          // width: 90.w,
-                                          color: Colors.amber,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Text("Preço", style: TextStyle(fontSize: 11.h, color: Color(cinza))),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Text('R\$ 72,00', style: TextStyle(fontSize: 20.h)),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Column(
-                children: [
-                  Text(x.toStringAsFixed(2)),
-                  Text(y.toStringAsFixed(2)),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
