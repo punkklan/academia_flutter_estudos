@@ -1,6 +1,6 @@
 /*
 Dado a lista pacientes faça:
-Remova os 2 ultimo paciente da lista
+Remova da lista os pacientes que são menor de idade.
 Imprima a lista acima na tela com o nome e a idade de cada paciente ex:
 Rodrigo Rahman tem 35 anos
 */
