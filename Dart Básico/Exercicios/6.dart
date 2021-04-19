@@ -44,7 +44,6 @@ void main() {
   
 //   paciente = only18(paciente);
 //   paciente.forEach((item) => print(item));
-
 // }
 
 // List<dynamic> only18 (List<dynamic> paciente) {
