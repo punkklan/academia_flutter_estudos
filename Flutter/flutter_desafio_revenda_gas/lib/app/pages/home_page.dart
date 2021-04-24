@@ -47,7 +47,9 @@ class _HomePageState extends State<HomePage> {
           toolbarHeight: 60.h,
           actions: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                setState(() {});
+              },
               child: SizedBox(
                   width: 60,
                   child: Icon(
@@ -57,6 +59,7 @@ class _HomePageState extends State<HomePage> {
             ),
             InkWell(
               onTap: () {
+                setState(() {});
                 print('Botão  ?   pressionado');
               },
               child: Padding(
