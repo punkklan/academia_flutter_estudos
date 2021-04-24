@@ -1,3 +1,3 @@
-# flutter Desafio Revenda Gás
+# Flutter Desafio Revenda Gás
 
-Primeira parte do desafio, apenas layout.
+Primeira parte, apenas layout.
