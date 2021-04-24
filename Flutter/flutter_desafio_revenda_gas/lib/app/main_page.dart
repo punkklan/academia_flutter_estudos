@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desafio_revenda_gas/app/my_colors.dart';
 import 'package:flutter_desafio_revenda_gas/app/pages/home_page.dart';
-import 'package:flutter_desafio_revenda_gas/app/pages/teste_page.dart';
+import 'package:flutter_desafio_revenda_gas/app/pages/shopping_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key key}) : super(key: key);
@@ -14,7 +14,7 @@ class MainPage extends StatelessWidget {
       initialRoute: HomePage.routerName,
       routes: {
         HomePage.routerName: (_) => HomePage(),
-        TestePage.routerName: (_) => TestePage(),
+        ShoppingPage.routerName: (_) => ShoppingPage(),
       },
     );
   }

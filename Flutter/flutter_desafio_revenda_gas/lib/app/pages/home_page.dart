@@ -1,14 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_desafio_revenda_gas/app/my_colors.dart';
-import 'package:flutter_desafio_revenda_gas/app/pages/teste_page.dart';
+import 'package:flutter_desafio_revenda_gas/app/pages/shopping_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
-
   static String routerName = '/';
 
   @override
@@ -17,6 +15,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<dynamic> revendedores;
+  //!
+  //!
+  //!    CORRIGIR INICIALIZAÇÃO - AINDA NECESSARIO HOT REALOAD PARA A LISTA FICAR VISÍVEL
+  //!
+  //!
+
   @override
   void initState() {
     super.initState();
@@ -28,12 +32,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    ScreenUtil.init(
-        BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width,
-          maxHeight: MediaQuery.of(context).size.height,
-        ),
-        // informe aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
+    ScreenUtil.init(BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+        //! informe aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
         designSize: Size(313, 663),
         orientation: Orientation.portrait);
 
@@ -57,8 +57,7 @@ class _HomePageState extends State<HomePage> {
             ),
             InkWell(
               onTap: () {
-                print('Navigator Teste Page');
-                Navigator.of(context).pushNamed(TestePage.routerName);
+                print('Botão  ?   pressionado');
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 23.h),
@@ -146,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  // Marcas de Gas ---------------------
+                                  //!  --------------    Marcas de Gas ---------------------
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -172,172 +171,171 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   ),
-                                  //
-                                  // Área Branca
-                                  Container(
-                                    //  -30 é a lagura do Banner Marca do gás
-                                    //  -20 é a soma padding inicial left + right
-                                    width: MediaQuery.of(context).size.width - 30.w - 20.w,
-                                    height: 95.h,
-                                    color: Colors.white,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        //
-                                        // Linha Superior
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 18.h, left: 8.w, bottom: 15.h),
-                                              child: Text(
-                                                revendedores[index]['nome'],
-                                                style: TextStyle(
-                                                  fontSize: 12.h,
-                                                  fontWeight: FontWeight.bold,
+                                  //!   --------------     Área Branca   --------------
+                                  InkWell(
+                                    onTap: () {
+                                      print('Navigator Shopping Page');
+                                      Navigator.of(context).pushNamed(ShoppingPage.routerName);
+                                    },
+                                    child: Container(
+                                      //  -30 é a lagura do Banner Marca do gás
+                                      //  -20 é a soma padding inicial left + right
+                                      width: MediaQuery.of(context).size.width - 30.w - 20.w,
+                                      height: 95.h,
+                                      color: Colors.white,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          //!  -------------- Linha Superior  --------------
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 18.h, left: 8.w, bottom: 15.h),
+                                                child: Text(
+                                                  revendedores[index]['nome'],
+                                                  style: TextStyle(
+                                                    fontSize: 12.h,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            revendedores[index]['melhorPreco']
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Color(MyColors.laranja),
-                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(5.h),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.label,
-                                                            size: 15.h,
-                                                            color: Colors.white,
-                                                          ),
-                                                          SizedBox(width: 5.w),
-                                                          Text(
-                                                            'Melhor Preço',
-                                                            style: TextStyle(fontSize: 8.5.h, color: Colors.white),
-                                                          ),
-                                                        ],
+                                              revendedores[index]['melhorPreco']
+                                                  ? Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Color(MyColors.laranja),
+                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
                                                       ),
-                                                    ),
-                                                  )
-                                                : Container(),
-                                          ],
-                                        ),
-                                        //
-                                        //  linha inferior
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              //
-                                              //  Nota
-                                              Container(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text("Nota", style: TextStyle(fontSize: 11.h, color: Color(MyColors.cinza))),
-                                                    SizedBox(
-                                                      height: 3.h,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Text(revendedores[index]['nota'].toString(),
-                                                            style: TextStyle(
-                                                              fontSize: 18.h,
-                                                              fontWeight: FontWeight.bold,
-                                                            )),
-                                                        Stack(
-                                                          alignment: AlignmentDirectional.center,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.all(5.h),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                           children: [
                                                             Icon(
-                                                              Icons.star,
-                                                              size: 18.h,
-                                                              color: Color(MyColors.cinza),
+                                                              Icons.label,
+                                                              size: 15.h,
+                                                              color: Colors.white,
                                                             ),
-                                                            Icon(
-                                                              Icons.star,
-                                                              size: 12.h,
-                                                              color: Colors.yellow,
+                                                            SizedBox(width: 5.w),
+                                                            Text(
+                                                              'Melhor Preço',
+                                                              style: TextStyle(fontSize: 8.5.h, color: Colors.white),
                                                             ),
                                                           ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-
-                                              //  Tempo Médio
-                                              Container(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      "Tempo Médio",
-                                                      style: TextStyle(
-                                                        fontSize: 11.h,
-                                                        color: Color(MyColors.cinza),
                                                       ),
-                                                    ),
-                                                    SizedBox(height: 3.h),
-                                                    Row(
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text("30-45",
-                                                            style: TextStyle(
-                                                              fontSize: 18.h,
-                                                              fontWeight: FontWeight.bold,
-                                                            )),
-                                                        Padding(
-                                                          padding: EdgeInsets.only(bottom: 1.2.h),
-                                                          child: Text(
-                                                            "min",
-                                                            style: TextStyle(
-                                                              fontSize: 10.h,
-                                                              color: Color(MyColors.cinza),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-
-                                              //  Preço
-                                              Container(
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      "Preço",
-                                                      style: TextStyle(
-                                                        fontSize: 11.h,
-                                                        color: Color(MyColors.cinza),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 3.h,
-                                                    ),
-                                                    Text(('R\$ ' + revendedores[index]['preco'].toStringAsFixed(2)),
-                                                        style: TextStyle(
-                                                          fontSize: 18.h,
-                                                          fontWeight: FontWeight.bold,
-                                                        )),
-                                                  ],
-                                                ),
-                                              ),
+                                                    )
+                                                  : Container(),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                          //!  --------------  linha inferior --------------
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                //
+                                                //  Nota
+                                                Container(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text("Nota", style: TextStyle(fontSize: 11.h, color: Color(MyColors.cinza))),
+                                                      SizedBox(
+                                                        height: 3.h,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(revendedores[index]['nota'].toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 18.h,
+                                                                fontWeight: FontWeight.bold,
+                                                              )),
+                                                          Stack(
+                                                            alignment: AlignmentDirectional.center,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.star,
+                                                                size: 18.h,
+                                                                color: Color(MyColors.cinza),
+                                                              ),
+                                                              Icon(
+                                                                Icons.star,
+                                                                size: 12.h,
+                                                                color: Colors.yellow,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                //! --------------  Tempo Médio --------------
+                                                Container(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        "Tempo Médio",
+                                                        style: TextStyle(
+                                                          fontSize: 11.h,
+                                                          color: Color(MyColors.cinza),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 3.h),
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Text("30-45",
+                                                              style: TextStyle(
+                                                                fontSize: 18.h,
+                                                                fontWeight: FontWeight.bold,
+                                                              )),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(bottom: 1.2.h),
+                                                            child: Text(
+                                                              "min",
+                                                              style: TextStyle(
+                                                                fontSize: 10.h,
+                                                                color: Color(MyColors.cinza),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                //! --------------   Preço  --------------
+                                                Container(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        "Preço",
+                                                        style: TextStyle(
+                                                          fontSize: 11.h,
+                                                          color: Color(MyColors.cinza),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 3.h),
+                                                      Text(('R\$ ' + revendedores[index]['preco'].toStringAsFixed(2)),
+                                                          style: TextStyle(
+                                                            fontSize: 18.h,
+                                                            fontWeight: FontWeight.bold,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
