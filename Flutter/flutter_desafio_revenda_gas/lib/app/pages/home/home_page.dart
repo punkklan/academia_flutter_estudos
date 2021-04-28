@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_desafio_revenda_gas/app/model/revenda_model.dart';
 import 'package:flutter_desafio_revenda_gas/app/pages/my_colors.dart';
 import 'package:flutter_desafio_revenda_gas/app/pages/home/components/tag_melhor_preco.dart';
 import 'package:flutter_desafio_revenda_gas/app/pages/shop/shop_page.dart';
+import 'package:flutter_desafio_revenda_gas/app/repositories/revendas_repository.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,33 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<dynamic> revendedores;
-  //!
-  //!
-  //!    CORRIGIR INICIALIZAÇÃO - AINDA NECESSARIO HOT REALOAD PARA A LISTA FICAR VISÍVEL
-  //!
-  //!
-
-  @override
-  void initState() {
-    super.initState();
-    rootBundle.loadString('assets/dados.json').then((jsonData) {
-      revendedores = json.decode(jsonData);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    bool isPortrait = ScreenUtil().orientation == Orientation.portrait;
     final List<String> filtros = ['Melhor Avaliação', 'Mais Rápido', 'Mais Barato'];
-    ScreenUtil.init(
-        BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width,
-          maxHeight: MediaQuery.of(context).size.height,
-        ),
-        //! informe aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
-        designSize: Size(313, 663),
-        orientation: Orientation.portrait);
 
     return Scaffold(
       backgroundColor: Color(MyColors.cinzaFundo),
@@ -168,10 +145,27 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //!   ---------   Lista de Revendedores de gás  ----------------
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: revendedores?.length ?? 0,
-                    itemBuilder: (_, index) {
-                      return _buildRevenda(index, context);
+                  child: FutureBuilder<List<RevendaModel>>(
+                    future: RevendasRepository().buscarTodasRevendas(),
+                    builder: (_, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return Container();
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.done:
+                        case ConnectionState.active:
+                          var data = snapshot.data;
+                          return ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (_, index) {
+                                return _buildRevenda(data[index]);
+                              });
+                        default:
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                      }
                     },
                   ),
                 ),
@@ -180,11 +174,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRevenda(int index, BuildContext context) {
+  Widget _buildRevenda(RevendaModel revenda) {
     return Container(
       height: 90.r,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+      margin: EdgeInsets.only(top: 15.w, left: 15.h, right: 15.h),
       child: InkWell(
         onTap: () {
           print('Navigator Shopping Page');
@@ -200,14 +194,14 @@ class _HomePageState extends State<HomePage> {
                   height: 90.r,
                   width: 30.r,
                   decoration: BoxDecoration(
-                    color: Color(int.parse('0xFF' + revendedores[index]['cor'])),
+                    color: Color(int.parse('0xFF' + revenda.cor)),
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
                   ),
                   child: RotatedBox(
                     quarterTurns: -1,
                     child: Center(
                       child: Text(
-                        revendedores[index]['tipo'],
+                        revenda.tipo,
                         style: TextStyle(fontSize: 11.r, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -234,14 +228,14 @@ class _HomePageState extends State<HomePage> {
                             left: 12.r,
                           ),
                           child: Text(
-                            revendedores[index]['nome'],
+                            revenda.nome,
                             style: TextStyle(
                               fontSize: 12.r,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        revendedores[index]['melhorPreco'] ? TagMelhorPreco() : SizedBox(),
+                        Visibility(visible: revenda.melhorPreco, child: TagMelhorPreco()),
                       ],
                     ),
                     //!  --------------  linha inferior --------------
@@ -256,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(height: 3.h),
                             Row(
                               children: [
-                                Text(revendedores[index]['nota'].toString(),
+                                Text(revenda.nota.toString(),
                                     style: TextStyle(
                                       fontSize: 18.r,
                                       fontWeight: FontWeight.bold,
@@ -297,7 +291,7 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(color: Colors.black),
                                 children: [
                                   TextSpan(
-                                    text: revendedores[index]['tempoMedio'],
+                                    text: revenda.tempoMedio,
                                     style: TextStyle(fontSize: 18.r, fontWeight: FontWeight.bold),
                                   ),
                                   TextSpan(
@@ -321,11 +315,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(height: 3.h),
                             Text(
-                              ('R\$ ' + revendedores[index]['preco'].toStringAsFixed(2)),
-                              style: TextStyle(
-                                fontSize: 18.r,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              ('R\$ ' + revenda.preco.toStringAsFixed(2).replaceAll('.', ',')),
+                              style: TextStyle(fontSize: 18.r, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),

@@ -14,14 +14,6 @@ class Bullet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-        BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width,
-          maxHeight: MediaQuery.of(context).size.height,
-        ),
-        //! informa aqui o tamanho da tela e orientação que foi utilizada para o desenvolvimento
-        designSize: Size(313, 663),
-        orientation: Orientation.portrait);
     return Column(
       children: [
         Container(
