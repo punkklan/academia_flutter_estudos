@@ -1,38 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_desafio_revenda_gas/app/components/bullet.dart';
+import 'package:flutter_desafio_revenda_gas/app/model/revenda_model.dart';
+import 'package:flutter_desafio_revenda_gas/app/pages/shop/components/bullet.dart';
 import 'package:flutter_desafio_revenda_gas/app/pages/my_colors.dart';
+import 'package:flutter_desafio_revenda_gas/app/pages/shop/components/botao_pagamento.dart';
+import 'package:flutter_desafio_revenda_gas/app/pages/shop/components/value_animation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShopPage extends StatefulWidget {
-  const ShopPage({Key key}) : super(key: key);
+  final RevendaModel revenda;
 
   static String routerName = '/shopping_page';
 
+  const ShopPage({
+    Key key,
+    @required this.revenda,
+  }) : super(key: key);
+
   @override
-  _ShopPageState createState() => _ShopPageState();
+  _ShopPageState createState() => _ShopPageState(revenda: revenda);
 }
 
 class _ShopPageState extends State<ShopPage> {
-  int _unidades = 1;
-  double _valor = 74.90;
-  double _valorTotal = 74.90;
+  final RevendaModel revenda;
+  int _totalProduto = 1;
+  double _valorTotal;
+
+  _ShopPageState({@required this.revenda}) : this._valorTotal = revenda.preco;
+  void adicionarProduto() {
+    setState(() {
+      _totalProduto++;
+      _valorTotal = _totalProduto * revenda.preco;
+    });
+  }
+
+  void removerProduto() {
+    if (_totalProduto > 0) {
+      setState(() {
+        _totalProduto--;
+        _valorTotal = _totalProduto * revenda.preco;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    _unidadesMais() {
-      _unidades++;
-      _valorTotal = _valor * _unidades;
-      print('Valor Total $_valorTotal');
-      setState(() {});
-    }
-
-    _unidadesMenos() {
-      _unidades <= 0 ? _unidades = 0 : _unidades--;
-      _valorTotal = _valor * _unidades;
-      print('Valor Total $_valorTotal');
-      setState(() {});
-    }
 
     return Scaffold(
       backgroundColor: Color(MyColors.cinzaFundo),
@@ -60,22 +72,19 @@ class _ShopPageState extends State<ShopPage> {
           : Column(
               children: [
                 _buildStepShop(),
-                _buildBoxRevenda(context),
-                _buildProdutoDaRevenda(_unidadesMenos, _unidadesMais),
+                _buildBoxRevenda(),
+                _buildProdutoDaRevenda(),
                 Expanded(child: SizedBox()),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 38.h),
-                  child: InkWell(
-                    onTap: () => print('Botão \'IR PARAMENTO\'  pressionado'),
-                    child: BotaoPagamento(),
-                  ),
+                  padding: EdgeInsets.only(bottom: 15.r),
+                  child: BotaoPagamento(),
                 ),
               ],
             ),
     );
   }
 
-  Widget _buildProdutoDaRevenda(_unidadesMenos(), _unidadesMais()) {
+  Widget _buildProdutoDaRevenda() {
     return Container(
       margin: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
@@ -97,16 +106,19 @@ class _ShopPageState extends State<ShopPage> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.h),
                     child: Text(
-                      'Unigas',
+                      revenda.nome,
                       style: TextStyle(fontSize: 12.r),
                     ),
                   ),
                   Row(
                     children: [
-                      Text('4.5', style: TextStyle(fontSize: 12.r)),
+                      Text(
+                        revenda.nota.toString().replaceAll('.', ','),
+                        style: TextStyle(fontSize: 12.r),
+                      ),
                       Icon(Icons.star, size: 9.r, color: Color(MyColors.laranja)),
                       SizedBox(width: 20.w),
-                      Text('30-45 min'),
+                      Text(revenda.tempoMedio + ' min'),
                     ],
                   ),
                 ],
@@ -114,10 +126,10 @@ class _ShopPageState extends State<ShopPage> {
               Padding(
                 padding: EdgeInsets.all(5.r),
                 child: Container(
-                  color: Colors.black,
+                  color: Color(int.parse('0xFF' + revenda.cor)),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
-                    child: Text('Multimarcas', style: TextStyle(color: Colors.white, fontSize: 10.r)),
+                    child: Text(revenda.tipo, style: TextStyle(color: Colors.white, fontSize: 10.r)),
                   ),
                 ),
               ),
@@ -135,7 +147,7 @@ class _ShopPageState extends State<ShopPage> {
                     Padding(
                         padding: EdgeInsets.symmetric(vertical: 3.h),
                         child: Text(
-                          'Unigas',
+                          revenda.nome,
                           style: TextStyle(fontSize: 12.r),
                         )),
                     Row(
@@ -152,7 +164,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                         ),
                         Text(
-                          '${_valor.toStringAsFixed(2)}',
+                          revenda.preco.toStringAsFixed(2).replaceAll('.', ','),
                           style: TextStyle(fontSize: 16.r, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -163,12 +175,12 @@ class _ShopPageState extends State<ShopPage> {
               Row(
                 children: [
                   InkWell(
-                    onTap: () => _unidadesMenos(),
+                    onTap: () => this.removerProduto(),
                     child: _botaoCinza('-'),
                   ),
-                  _botijaoWidget(_unidades),
+                  _botijaoWidget(_totalProduto),
                   InkWell(
-                    onTap: () => _unidadesMais(),
+                    onTap: () => this.adicionarProduto(),
                     child: _botaoCinza('+'),
                   ),
                 ],
@@ -287,7 +299,7 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  Widget _buildBoxRevenda(BuildContext context) {
+  Widget _buildBoxRevenda() {
     return Container(
       margin: EdgeInsets.only(top: 2.h),
       color: Colors.white,
@@ -303,18 +315,21 @@ class _ShopPageState extends State<ShopPage> {
                   height: 24.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: Color(int.parse('0xFF' + revenda.cor)),
                   ),
                   child: Center(
                     child: Text(
-                      '1',
-                      style: TextStyle(fontSize: 12.r, color: Colors.white),
+                      _totalProduto.toString(),
+                      style: TextStyle(
+                        fontSize: 12.r,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
               Text(
-                'Unigas - Botijão de 13kg',
+                '${revenda.nome} - Botijão 13kg',
                 style: TextStyle(fontSize: 12.r),
               ),
             ],
@@ -322,62 +337,10 @@ class _ShopPageState extends State<ShopPage> {
           Container(
             child: Padding(
               padding: EdgeInsets.only(right: 11.5.w),
-              child: RichText(
-                text: TextSpan(
-                  style: TextStyle(color: Colors.black),
-                  children: [
-                    TextSpan(
-                      text: 'R\$ ',
-                      style: TextStyle(
-                        fontSize: 10.r,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: _valorTotal.toStringAsFixed(2),
-                      style: TextStyle(
-                        fontSize: 16.r,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: ValueAnimation(value: _valorTotal),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class BotaoPagamento extends StatelessWidget {
-  const BotaoPagamento({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 61.r,
-      width: 190.r,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(100.0.r)),
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [Colors.lightBlue[400], Colors.blue[800]],
-        ),
-      ),
-      child: Center(
-        child: Text(
-          'IR PARA O PAGAMENTO',
-          style: TextStyle(
-            fontSize: 13.r,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
     );
   }

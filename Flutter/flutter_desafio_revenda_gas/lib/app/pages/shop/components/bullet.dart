@@ -17,8 +17,8 @@ class Bullet extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 16.w,
           height: 16.h,
+          width: 16.w,
           margin: EdgeInsets.only(bottom: 10.r),
           decoration: BoxDecoration(
             color: enabled ? Color(MyColors.azul) : Colors.white,
@@ -28,7 +28,7 @@ class Bullet extends StatelessWidget {
                 ? [
                     BoxShadow(
                       color: enabled ? Colors.grey[300] : Color(MyColors.azul),
-                      blurRadius: 3,
+                      blurRadius: 3.r,
                       spreadRadius: 8.r,
                     ),
                   ]
